@@ -1,0 +1,197 @@
+<html>
+<head>
+ <title>Show Page</title>
+    <meta charset="utf-8">
+    <!-- 引入 ECharts 文件 -->
+     <script src="/static/echarts.js"></script> 
+	 <script src="/static/map/js/china.js"></script>
+	 <script src="/static/theme/vintage.js"></script>
+	 <script src="/static/theme/dark.js"></script>
+	 <script src="/static/theme/macarons.js"></script>
+	 <script src="/static/theme/infographic.js"></script>
+	 <script src="/static/theme/shine.js"></script>
+    <!-- {{ url_for('static', filename='echarts.js') }} -->
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main"  style="width: 600px;height:600px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'), 'shine');
+
+        // 指定图表的配置项和数据
+		function randomData() {
+			return Math.round(Math.random()*1000);
+		}
+
+option = {
+    title: {
+        text: '对外担保数据各省分布（亿）',
+        subtext: '暖流资产版权所有',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'item'
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data:['对外担保总额','对外担保产能过剩行业','对外担保暖流负面清单']
+    },
+    visualMap: {
+        min: 0,
+        max: 3000,
+        left: 'left',
+        top: 'bottom',
+        text: ['高','低'],           // 文本，默认为数值文本
+        calculable: true
+    },
+    toolbox: {
+        show: true,
+        orient: 'vertical',
+        left: 'right',
+        top: 'center',
+        feature: {
+            dataView: {readOnly: false},
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    series: [
+        {
+            name: '对外担保总额',
+            type: 'map',
+            mapType: 'china',
+            roam: false,
+            label: {
+                normal: {
+                    show: true
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            data:[
+ {name: '广东',value: 7485.47 },
+{name: '北京',value: 6803.75 },
+{name: '江苏',value: 3680.24 },
+{name: '上海',value: 2855.37 },
+{name: '浙江',value: 2333.40 },
+{name: '福建',value: 1540.16 },
+{name: '山东',value: 1131.35 },
+{name: '辽宁',value: 876.21 },
+{name: '天津',value: 786.08 },
+{name: '云南',value: 705.63 },
+{name: '河北',value: 694.19 },
+{name: '陕西',value: 675.41 },
+{name: '河南',value: 614.74 },
+{name: '四川',value: 599.48 },
+{name: '山西',value: 534.15 },
+{name: '新疆',value: 507.23 },
+{name: '海南',value: 499.36 },
+{name: '重庆',value: 469.83 },
+{name: '湖南',value: 391.32 },
+{name: '湖北',value: 337.55 },
+{name: '安徽',value: 326.02 },
+{name: '内蒙古',value: 231.37 },
+{name: '贵州',value: 206.20 },
+{name: '江西',value: 191.83 },
+{name: '吉林',value: 123.25 },
+{name: '广西',value: 118.21 },
+{name: '甘肃',value: 108.43 },
+{name: '黑龙江',value: 79.46 },
+{name: '青海',value: 67.18 },
+{name: '宁夏',value: 19.01 },
+{name: '西藏',value: 6.10 }
+            ]
+        },
+        {
+            name: '对外担保产能过剩行业',
+            type: 'map',
+            mapType: 'china',
+            label: {
+                normal: {
+                    show: true
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            data:[
+{name: '广东',value: 5958.52 },
+{name: '上海',value: 2417.85 },
+{name: '北京',value: 1673.02 },
+{name: '福建',value: 936.27 },
+{name: '江苏',value: 783.46 },
+{name: '辽宁',value: 464.74 },
+{name: '河北',value: 436.31 },
+{name: '山西',value: 421.54 },
+{name: '河南',value: 396.89 },
+{name: '浙江',value: 379.73 },
+{name: '重庆',value: 357.81 },
+{name: '山东',value: 290.51 },
+{name: '云南',value: 284.73 },
+{name: '四川',value: 208.94 },
+{name: '天津',value: 173.47 },
+{name: '陕西',value: 149.72 },
+{name: '湖北',value: 125.35 },
+{name: '贵州',value: 93.49 },
+{name: '内蒙古',value: 76.07 },
+{name: '安徽',value: 66.32 },
+{name: '新疆',value: 57.71 },
+{name: '甘肃',value: 44.76 },
+{name: '湖南',value: 34.09 },
+{name: '广西',value: 27.07 },
+{name: '江西',value: 25.09 },
+{name: '吉林',value: 11.82 },
+{name: '青海',value: 9.99 },
+{name: '西藏',value: 6.10 },
+{name: '宁夏',value: 1.01 }
+            ]
+        },
+        {
+            name: '对外担保暖流负面清单',
+            type: 'map',
+            mapType: 'china',
+            label: {
+                normal: {
+                    show: true
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            data:[
+{name: '辽宁',value: 246.89 },
+{name: '北京',value: 159.06 },
+{name: '江苏',value: 119.26 },
+{name: '山东',value: 116.19 },
+{name: '河南',value: 82.01 },
+{name: '浙江',value: 72.50 },
+{name: '山西',value: 68.77 },
+{name: '河北',value: 64.90 },
+{name: '湖南',value: 48.55 },
+{name: '安徽',value: 41.97 },
+{name: '内蒙古',value: 41.93 },
+{name: '天津',value: 32.08 },
+{name: '江西',value: 25.09 },
+{name: '重庆',value: 15.60 },
+{name: '陕西',value: 14.57 },
+{name: '上海',value: 14.28 },
+{name: '青海',value: 7.50 },
+{name: '新疆',value: 4.80 },
+{name: '四川',value: 3.01 },
+{name: '福建',value: 1.52 },
+{name: '贵州',value: 0.83 },
+{name: '甘肃',value: 0.74 },
+{name: '湖北',value: 0.54 }
+            ]
+        }
+    ]
+};
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+</html>
