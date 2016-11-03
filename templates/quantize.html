@@ -1,0 +1,246 @@
+<html>
+<head>
+ <title></title>
+    <meta charset="utf-8">
+    <!-- 引入 ECharts 文件 -->
+	<script src="/static/echarts.js"></script> 
+	 <script src="/static/theme/vintage.js"></script>
+	 <script src="/static/theme/dark.js"></script>
+	 <script src="/static/theme/macarons.js"></script>
+	 <script src="/static/theme/infographic.js"></script>
+	 <script src="/static/theme/shine.js"></script> 
+	  <script src="{{url_for('static', filename='jquery.min.js')}}"></script>
+	  <script src="{{url_for('static', filename='bootstrap-datetimepicker.js')}}"></script>
+	  <script src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
+	  <script src="{{url_for('static', filename='bootstrap-select.min.js')}}"></script>
+	  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap-datetimepicker.css')}}">
+	  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap.min.css')}}">
+	  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap-select.min.css')}}">
+	  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='quantilize.css')}}">
+    <!-- {{ url_for('static', filename='echarts.js') }} -->
+	<script type="text/javascript">
+	var myChart=null;
+	var  date = [];
+	var level1= []; 
+	var level2= [];
+	var	value= [];
+	var temp;
+     
+	$(document).ready(function(){
+	$("#date_1").datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:'true',
+		minView:2
+	});
+		initAreaData();
+		var html='';
+		html+='	<option selected="true"  disabled=true>请选择</option>';
+		for(var i=0;i<level1.length;i++){
+			html+="<option>"+level1[i]+"</option>";
+		}
+		$("#level1").html(html);
+		var html2="";
+		$("#level2").html(html2);
+		$("#level1").bind("change",function(){
+			var level1text=$("#level1").val();
+			level2=[];
+			html2='';
+			html2+="<option>"+"所有"+"</option>";
+			for(var i=0;i<temp.length;i++){
+				if(temp[i].level2!='无'&&temp[i].level1==level1text){
+					html2+="<option>"+temp[i].level2+"</option>";
+					level2.push(temp[i].level2);
+				}
+			}			
+			$("#level2").html(html2);
+		});
+		
+	});
+
+function initAreaData(){ 
+var dataurl="/static/data.json"; 
+$.ajax({
+        type: "get",
+        url: dataurl,
+        dataType:"json",
+        cache:false,
+        async:false,
+        success: function(data) {
+        	if(data!=null){
+				temp=data;
+        		for(var i=0;i<80;i++){
+				if(data[i].level2=="无"){
+				level1.push(data[i].level1); 
+				}
+				}
+			}else{
+        		
+        	}
+        },
+        error:function (XMLHttpRequest, textStatus, errorThrown){
+        	
+        }
+    });    
+
+};
+function go(){
+	var level2text=$("#level2").val();
+	var level1text=$("#level1").val();
+	var datetext=$("#date_1").val();
+	var temdata;
+	var tmpArray=[];
+	if(level2text=="所有"){
+		for(var i=0;i<level2.length;i++){
+			$.ajax({
+			type: "post",
+			url: "/test",
+			dataType:"json",
+			cache:false,
+			async:false,
+			data:{
+				"date":datetext,
+				"level1":level1text,
+				"level2":level2[i]
+			},
+			success: function(data) {
+				if(data!=null){
+					tmpArray.push(data[0].value);
+				}else{
+					
+				}
+			},
+			error:function (XMLHttpRequest, textStatus, errorThrown){
+				
+			}
+		}); 
+		}
+	option = {
+		title : {
+			text: '风险得分',
+			x:'center'
+		},
+		toolbox: {
+			feature: {
+	   //         restore: {},
+				saveAsImage: {}
+			}
+		},
+		legend: {
+			orient: 'vertical',
+			left: 'left',
+			data: level2
+		},
+    series : [
+        {
+            name: '风险得分',
+            type: 'pie',
+            radius : '65%',
+            center: ['50%', '60%'],
+            data:(function(){  
+                                var res = [];  
+                                var len = -1;  
+                                while (len++<10) {  
+                                res.push({  
+                                name: level2[len],  
+                                value:tmpArray[len]
+                                  
+                                });
+								}  
+                                return res;  
+                                })(),
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+	}else{
+	$.ajax({
+			type: "post",
+			url: "/test",
+			dataType:"json",
+			cache:false,
+			async:false,
+			data:{
+				"date":datetext,
+				"level1":level1text,
+				"level2":level2text
+			},
+			success: function(data) {
+				if(data!=null){
+					temdata=data[0].value;
+				}else{
+					
+				}
+			},
+			error:function (XMLHttpRequest, textStatus, errorThrown){
+				
+			}
+		}); 
+		option = {
+    toolbox: {
+        feature: {
+   //         restore: {},
+            saveAsImage: {}
+        }
+    },
+    series: [
+        {
+            name: '风险值',
+            type: 'gauge',
+			axisLine: { //仪表盘轴线样式
+				lineStyle: {
+					width: 15
+				}
+			},
+            data: [{value: temdata, name: '风险得分'}]
+        }
+    ]
+	};
+	}//else end
+	myChart= echarts.init(document.getElementById('main'), 'shine');
+    myChart.setOption(option);
+}
+		
+        
+	</script>
+
+</head>
+<body>
+<div style="margin-top:20px;">
+ <div class="container-fluid"> 
+ <div class="row" >
+<form class="form-inline" role="form" >
+ 	<div class="form-group col-sm-3">
+	 	<label   class="col-sm-4 control-label right">日期:</label>
+	    <input class="col-sm-8" type="text" id="date_1"  >
+	</div>
+	<div class="form-group col-sm-3">
+	 	<label   class="col-sm-6 control-label right">一级行业:</label>
+		<select class="col-sm-6" id="level1">
+
+		</select>
+	</div>	
+	 <div class="form-group col-sm-3" >  
+	 	<label  class=" control-label col-sm-6 right">二级行业:</label>
+	    <select class="col-sm-6" id="level2">
+
+		</select>
+	</div>
+    <div class="form-group col-sm-2">  
+		<button type="button" class="button_radius" onclick="go()">GO!</button>
+	</div>
+</form>
+<div class="row" >
+
+<hr class="line1">
+<div class="risk">
+<div id="main" class="block-echart"></div>
+</div>
+</div>
+</body>
+</html>
