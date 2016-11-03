@@ -69,10 +69,10 @@ def testdataGenerator(cur_date="2016-11-01", prev_date=None, level1=None, level2
 			dic_item = {}
 			shu = round(random.uniform(1,100), 2)
 			#outline = "%s,level1,%s,%.2f" % (dat, hangye1, shu)
-			dic_item[u"日期"] = cur_date
-			dic_item[u"第一行业"] = hangye1
-			dic_item[u"第二行业"] = u"全部"
-			dic_item[u"数值"] = shu
+			dic_item[u"date"] = cur_date
+			dic_item[u"level1"] = hangye1
+			dic_item[u"level2"] = u"全部"
+			dic_item[u"value"] = shu
 			lst.append(dic_item)
 			
 		for hangye1 in dic.keys():
@@ -81,10 +81,10 @@ def testdataGenerator(cur_date="2016-11-01", prev_date=None, level1=None, level2
 				shu = round(random.uniform(1,100), 2)
 				#shu1 = "%.2f" % (shu,)
 				#outline = "%s,level2,%s,%.2f,%s" % (dat, hangye2, shu, hangye1)
-				dic_item[u"日期"] = cur_date
-				dic_item[u"第一行业"] = hangye1
-				dic_item[u"第二行业"] = hangye2
-				dic_item[u"数值"] = shu	
+				dic_item[u"date"] = cur_date
+				dic_item[u"level1"] = hangye1
+				dic_item[u"level2"] = hangye2
+				dic_item[u"date"] = shu	
 				lst.append(dic_item)
 		outstr = json.dumps(lst, ensure_ascii = False)#.encode("utf-8")
 		return outstr
@@ -96,10 +96,10 @@ def testdataGenerator(cur_date="2016-11-01", prev_date=None, level1=None, level2
 			dic_item = {}
 			shu = round(random.uniform(1,100), 2)
 			#outline = "%s,level1,%s,%.2f" % (dat, hangye1, shu)
-			dic_item[u"日期"] = cur_date
-			dic_item[u"第一行业"] = hangye1
-			dic_item[u"第二行业"] = u"全部"
-			dic_item[u"数值"] = shu
+			dic_item[u"date"] = cur_date
+			dic_item[u"level1"] = hangye1
+			dic_item[u"level2"] = u"全部"
+			dic_item[u"value"] = shu
 			lst.append(dic_item)
 			
 		for hangye1 in dic.keys():
@@ -111,10 +111,10 @@ def testdataGenerator(cur_date="2016-11-01", prev_date=None, level1=None, level2
 				shu = round(random.uniform(1,100), 2)
 				#shu1 = "%.2f" % (shu,)
 				#outline = "%s,level2,%s,%.2f,%s" % (dat, hangye2, shu, hangye1)
-				dic_item[u"日期"] = cur_date
-				dic_item[u"第一行业"] = hangye1
-				dic_item[u"第二行业"] = hangye2
-				dic_item[u"数值"] = shu	
+				dic_item[u"date"] = cur_date
+				dic_item[u"level1"] = hangye1
+				dic_item[u"level2"] = hangye2
+				dic_item[u"value"] = shu	
 				lst.append(dic_item)
 		outstr = json.dumps(lst, ensure_ascii = False)#.encode("utf-8")
 		return outstr	
@@ -144,10 +144,10 @@ def testdataGenerator(cur_date="2016-11-01", prev_date=None, level1=None, level2
 				shu = round(random.uniform(1,100), 2)
 				#shu1 = "%.2f" % (shu,)
 				#outline = "%s,level2,%s,%.2f,%s" % (dat, hangye2, shu, hangye1)
-				dic_item[u"日期"] = cur_date
-				dic_item[u"第一行业"] = hangye1
-				dic_item[u"第二行业"] = hangye2
-				dic_item[u"数值"] = shu	
+				dic_item[u"date"] = cur_date
+				dic_item[u"level1"] = hangye1
+				dic_item[u"level2"] = hangye2
+				dic_item[u"value"] = shu	
 				lst.append(dic_item)
 		outstr = json.dumps(lst, ensure_ascii = False)#.encode("utf-8")
 		return outstr	
@@ -172,6 +172,9 @@ def test():
 	level2 = request.form['level2']
 	return testdataGenerator(cur_date = cur_date, level1 = level1, level2 = level2)
 
+@app.route('/quantize')
+def quantize():
+	return render_template('quantize.html')
 
 @app.route('/linebar')
 def linebar():
