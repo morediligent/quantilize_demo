@@ -207,11 +207,12 @@ def test():
 	#global option
 	#lst = [5, 20, 36, 10, 10, 20]
 	#return render_template('show.html', mydata = option)
-	cur_date = request.form['date'] | "2016-10-01"
+	cur_date = request.form['cur_date'] | "2016-11-02"
+	prev_date = request.form['prev_date'] | "2016-10-01"
 	level1 = request.form['level1'] | u"房地产"
 	level2 = request.form['level2'] | u"房地产开发"
 	#return testdataGenerator(cur_date = cur_date, level1 = level1, level2 = level2)
-	return testdataGenerator(cur_date = cur_date, prev_date = "2016-10-01", level1 = level1, level2 = level2)
+	return testdataGenerator(cur_date = cur_date, prev_date = prev_date, level1 = level1, level2 = level2)
 	
 @app.route('/quantize')
 def quantize():
