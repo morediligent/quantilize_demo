@@ -1,0 +1,30 @@
+body{ 
+	font-family: "Microsoft YaHei";
+	font-size:16px;
+}
+.button_radius{ 
+	border-width: 1px;
+    border-radius: 8.5px;}
+	
+.line1{
+	height:1px;
+	border:0;
+	border-top:3px solid #cacfd2;
+
+}
+.risk{
+	text-align:center;
+}
+.block-echart{
+	width: 1020px;
+	height:650px;
+	margin:0 auto;
+}
+.right{
+	text-align:right;
+}
+.block_go{
+	width: 500px;
+	height:500px;
+	margin:0 auto;
+}

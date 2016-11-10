@@ -3,20 +3,26 @@
  <title></title>
     <meta charset="utf-8">
     <!-- 引入 ECharts 文件 -->
-	<script src="/static/echarts.js"></script> 
-	 <script src="/static/theme/vintage.js"></script>
-	 <script src="/static/theme/dark.js"></script>
-	 <script src="/static/theme/macarons.js"></script>
-	 <script src="/static/theme/infographic.js"></script>
-	 <script src="/static/theme/shine.js"></script> 
-	  <script src="{{url_for('static', filename='jquery.min.js')}}"></script>
-	  <script src="{{url_for('static', filename='bootstrap-datetimepicker.js')}}"></script>
-	  <script src="{{url_for('static', filename='bootstrap.min.js')}}"></script>
-	  <script src="{{url_for('static', filename='bootstrap-select.min.js')}}"></script>
-	  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap-datetimepicker.css')}}">
-	  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap.min.css')}}">
-	  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap-select.min.css')}}">
-	  <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='quantilize.css')}}">
+		<script src="/static/js/jquery.min.js"></script>
+		<script src="/static/js/echarts.js"></script> 
+		<script src="/static/theme/vintage.js"></script>
+		<script src="/static/theme/dark.js"></script>
+		<script src="/static/theme/macarons.js"></script>
+		<script src="/static/theme/infographic.js"></script>
+		<script src="/static/theme/shine.js"></script> 
+		<script src="/static/dist/js/flat-ui.min.js"></script>
+		<script src="/static/docs/assets/js/application.js"></script>
+		<script src="{{url_for('static', filename='js/bootstrap-datetimepicker.js')}}"></script>
+		<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+		<script src="/static/js/bootstrap-select.min.js"></script>
+	  
+	   
+		<link href="/static/docs/assets/css/demo.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-datetimepicker.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-select.min.css">
+		<link href="/static/dist/css/flat-ui.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="/static/css/quantilize.css">
     <!-- {{ url_for('static', filename='echarts.js') }} -->
 	<script type="text/javascript">
 	var myChart=null;
@@ -28,6 +34,11 @@
      
 	$(document).ready(function(){
 	$("#date_1").datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:'true',
+		minView:2
+	});
+		$("#date_2").datetimepicker({
 		format: 'yyyy-mm-dd',
 		autoclose:'true',
 		minView:2
@@ -45,7 +56,6 @@
 			var level1text=$("#level1").val();
 			level2=[];
 			html2='';
-			html2+="<option>"+"所有"+"</option>";
 			for(var i=0;i<temp.length;i++){
 				if(temp[i].level2!='无'&&temp[i].level1==level1text){
 					html2+="<option>"+temp[i].level2+"</option>";
@@ -87,78 +97,10 @@ function go(){
 	var level2text=$("#level2").val();
 	var level1text=$("#level1").val();
 	var datetext=$("#date_1").val();
-	var temdata;
+	var datetext2=$("#date_2").val();
+	var tmpdata;
 	var tmpArray=[];
-	if(level2text=="所有"){
-		for(var i=0;i<level2.length;i++){
-			$.ajax({
-			type: "post",
-			url: "/test",
-			dataType:"json",
-			cache:false,
-			async:false,
-			data:{
-				"date":datetext,
-				"level1":level1text,
-				"level2":level2[i]
-			},
-			success: function(data) {
-				if(data!=null){
-					tmpArray.push(data[0].value);
-				}else{
-					
-				}
-			},
-			error:function (XMLHttpRequest, textStatus, errorThrown){
-				
-			}
-		}); 
-		}
-	option = {
-		title : {
-			text: '风险得分',
-			x:'center'
-		},
-		toolbox: {
-			feature: {
-	   //         restore: {},
-				saveAsImage: {}
-			}
-		},
-		legend: {
-			orient: 'vertical',
-			left: 'left',
-			data: level2
-		},
-    series : [
-        {
-            name: '风险得分',
-            type: 'pie',
-            radius : '65%',
-            center: ['50%', '60%'],
-            data:(function(){  
-                                var res = [];  
-                                var len = -1;  
-                                while (len++<10) {  
-                                res.push({  
-                                name: level2[len],  
-                                value:tmpArray[len]
-                                  
-                                });
-								}  
-                                return res;  
-                                })(),
-            itemStyle: {
-                emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
-        }
-    ]
-};
-	}else{
+
 	$.ajax({
 			type: "post",
 			url: "/test",
@@ -166,42 +108,93 @@ function go(){
 			cache:false,
 			async:false,
 			data:{
-				"date":datetext,
+				"cur_date":datetext2,
+				"prev_date":datetext,
 				"level1":level1text,
 				"level2":level2text
 			},
 			success: function(data) {
 				if(data!=null){
-					temdata=data[0].value;
+					tmpdata=data;
 				}else{
 					
 				}
 			},
 			error:function (XMLHttpRequest, textStatus, errorThrown){
-				
+				console.log("wrong");
 			}
-		}); 
-		option = {
-    toolbox: {
-        feature: {
-   //         restore: {},
-            saveAsImage: {}
-        }
-    },
-    series: [
-        {
-            name: '风险值',
-            type: 'gauge',
-			axisLine: { //仪表盘轴线样式
-				lineStyle: {
-					width: 15
-				}
-			},
-            data: [{value: temdata, name: '风险得分'}]
-        }
-    ]
-	};
-	}//else end
+		});
+	for(var i=0;i<tmpdata.length;i++){
+	date.push(tmpdata[i].date);
+	value.push(tmpdata[i].value);
+	}
+	console.log(date);
+	console.log(value);	
+	option = {
+
+        title: {      //标题组件
+
+            text: '风险值'
+
+        },
+
+        tooltip: {    //提示框组件
+
+            trigger: 'axis'
+
+        },
+
+
+        grid: {       //直角坐标系内绘图网格
+
+            left: '3%',
+
+            right: '4%',
+
+            bottom: '3%',
+
+            containLabel: true
+
+        },
+
+        toolbox: {     //工具栏
+
+            feature: {
+
+                saveAsImage: {}
+
+            }
+
+        },
+
+        xAxis: {       //直角坐标系 grid 中的 x 轴
+
+            type: 'category',
+
+            boundaryGap: false,
+
+            data: date
+
+        },
+
+        yAxis: {       //直角坐标系 grid 中的 y 轴
+
+            type: 'value'
+
+        },
+
+        series: [      //系列列表
+
+            {
+                
+                type: 'line',
+                data: value
+            }
+
+
+        ]
+
+    };
 	myChart= echarts.init(document.getElementById('main'), 'shine');
     myChart.setOption(option);
 }
@@ -215,32 +208,31 @@ function go(){
  <div class="container-fluid"> 
  <div class="row" >
 <form class="form-inline" role="form" >
- 	<div class="form-group col-sm-3">
-	 	<label   class="col-sm-4 control-label right">日期:</label>
-	    <input class="col-sm-8" type="text" id="date_1"  >
+ 	<div class="form-group col-sm-2">
+	 	 <input type="text" value="" placeholder="start time" class="form-control" id="date_1"/>
+	</div>
+	<div class="form-group col-sm-2">
+	 	 <input type="text" value="" placeholder="end time" class="form-control" id="date_2"/>
 	</div>
 	<div class="form-group col-sm-3">
-	 	<label   class="col-sm-6 control-label right">一级行业:</label>
-		<select class="col-sm-6" id="level1">
-
-		</select>
+	 	<select class="form-control select select-primary" data-toggle="select" id="level1" style="width:100%;margin:0 0 20px 0">
+            <option>请选择一级行业</option>
+          </select>
 	</div>	
 	 <div class="form-group col-sm-3" >  
-	 	<label  class=" control-label col-sm-6 right">二级行业:</label>
-	    <select class="col-sm-6" id="level2">
-
-		</select>
+	 	 <select class="form-control select select-primary" data-toggle="select" id="level2" style="width:100%;margin:0 0 20px 0">
+            <option>请选择二级行业</option>
+          </select>
 	</div>
-    <div class="form-group col-sm-2">  
-		<button type="button" class="button_radius" onclick="go()">GO!</button>
+    <div class="form-group col-sm-1">  
+		<button type="button" class="btn btn-block btn-lg btn-default" onclick="go()">GO!</button>
 	</div>
 </form>
-<div class="row" >
+</div>
 
 <hr class="line1">
 <div class="risk">
 <div id="main" class="block-echart"></div>
-</div>
 </div>
 </body>
 </html>

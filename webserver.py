@@ -64,6 +64,7 @@ def testdataGenerator(cur_date="2016-11-01", prev_date=None, level1=None, level2
 	"""
 	生成测试数据
 	"""
+
 	if prev_date==None and level1==None and level2==None: #某一天所有行业的风险值
 		# generator data sequence
 		lst = []
@@ -154,12 +155,12 @@ def testdataGenerator(cur_date="2016-11-01", prev_date=None, level1=None, level2
 		outstr = json.dumps(lst, ensure_ascii = False)#.encode("utf-8")
 		return outstr	
 	elif not prev_date == None and not cur_date == None and not level1 == None and not level2 == None:
+		
 		lst = []
 		beginTime = time.strptime(prev_date, "%Y-%m-%d")
 		beginTimeStamp = int(time.mktime(beginTime))
 		dt1 = datetime.datetime.utcfromtimestamp(beginTimeStamp)
 		dt1 = dt1 + datetime.timedelta(hours = 8)
-		
 		endTime = time.strptime(cur_date, "%Y-%m-%d")
 		endTimeStamp = int(time.mktime(endTime))
 		dt2 = datetime.datetime.utcfromtimestamp(endTimeStamp)
@@ -207,10 +208,10 @@ def test():
 	#global option
 	#lst = [5, 20, 36, 10, 10, 20]
 	#return render_template('show.html', mydata = option)
-	cur_date = request.form['cur_date'] | "2016-11-02"
-	prev_date = request.form['prev_date'] | "2016-10-01"
-	level1 = request.form['level1'] | u"房地产"
-	level2 = request.form['level2'] | u"房地产开发"
+	cur_date = request.form['cur_date'] 
+	prev_date = request.form['prev_date'] 
+	level1 = request.form['level1'] 
+	level2 = request.form['level2'] 
 	#return testdataGenerator(cur_date = cur_date, level1 = level1, level2 = level2)
 	return testdataGenerator(cur_date = cur_date, prev_date = prev_date, level1 = level1, level2 = level2)
 	
