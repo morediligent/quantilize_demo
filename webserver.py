@@ -11,6 +11,8 @@ import StringIO
 from collections import defaultdict
 import random
 import json
+import time
+import datetime
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -151,6 +153,43 @@ def testdataGenerator(cur_date="2016-11-01", prev_date=None, level1=None, level2
 				lst.append(dic_item)
 		outstr = json.dumps(lst, ensure_ascii = False)#.encode("utf-8")
 		return outstr	
+	elif not prev_date == None and not cur_date == None and not level1 == None and not level2 == None:
+		lst = []
+		beginTime = time.strptime(prev_date, "%Y-%m-%d")
+		beginTimeStamp = int(time.mktime(beginTime))
+		dt1 = datetime.datetime.utcfromtimestamp(beginTimeStamp)
+		dt1 = dt1 + datetime.timedelta(hours = 8)
+		
+		endTime = time.strptime(cur_date, "%Y-%m-%d")
+		endTimeStamp = int(time.mktime(endTime))
+		dt2 = datetime.datetime.utcfromtimestamp(endTimeStamp)
+		dt2 = dt2 + datetime.timedelta(hours = 8)
+		
+		lst_dt = []
+		dt_n = dt1
+		while dt_n <= dt2:
+			lst_dt.append(dt_n)
+			dt_n += datetime.timedelta(days = 1)
+		print lst_dt
+		
+		for hangye1 in dic.keys():
+			if not hangye1 == level1:
+				continue		
+			for hangye2 in dic[hangye1].keys():
+				if not hangye2 == level2:
+					continue
+				for adate in lst_dt:
+					dic_item = {}
+					shu = round(random.uniform(1,100), 2)
+					#shu1 = "%.2f" % (shu,)
+					#outline = "%s,level2,%s,%.2f,%s" % (dat, hangye2, shu, hangye1)
+					dic_item[u"date"] = adate.strftime("%Y-%m-%d")
+					dic_item[u"level1"] = hangye1
+					dic_item[u"level2"] = hangye2
+					dic_item[u"value"] = shu	
+					lst.append(dic_item)
+		outstr = json.dumps(lst, ensure_ascii = False)#.encode("utf-8")
+		return outstr		
 	else:
 		return "hello world!"
 		#fout.write(json.dumps(dic_item, ensure_ascii=False).encode("utf-8") + ",\n" )	
@@ -160,18 +199,21 @@ def testdataGenerator(cur_date="2016-11-01", prev_date=None, level1=None, level2
 def index():
 	#return render_template('home.html', name="Hahaha")
 	#return testdataGenerator(cur_date = "2016-11-02", level1 = u"房地产")
-	return testdataGenerator(cur_date = "2016-11-02", level1 = u"房地产", level2 = u"房地产开发")
+	#return testdataGenerator(cur_date = "2016-11-02", level1 = u"房地产", level2 = u"房地产开发")
+	return testdataGenerator(cur_date = "2016-11-02", prev_date = '2016-10-01', level1 = u"房地产", level2 = u"房地产开发")
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
 	#global option
 	#lst = [5, 20, 36, 10, 10, 20]
 	#return render_template('show.html', mydata = option)
-	cur_date = request.form['date']
-	level1 = request.form['level1']
-	level2 = request.form['level2']
-	return testdataGenerator(cur_date = cur_date, level1 = level1, level2 = level2)
-
+	cur_date = request.form['cur_date'] | "2016-11-02"
+	prev_date = request.form['prev_date'] | "2016-10-01"
+	level1 = request.form['level1'] | u"房地产"
+	level2 = request.form['level2'] | u"房地产开发"
+	#return testdataGenerator(cur_date = cur_date, level1 = level1, level2 = level2)
+	return testdataGenerator(cur_date = cur_date, prev_date = prev_date, level1 = level1, level2 = level2)
+	
 @app.route('/quantize')
 def quantize():
 	return render_template('quantize.html')
